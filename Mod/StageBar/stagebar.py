@@ -137,7 +137,6 @@ import FreeCADGui
 from PySide2 import QtWidgets, QtCore
 
 class StageBar(QtWidgets.QWidget):
-    stageChanged = QtCore.Signal(str, list)
 
     def __init__(self, toolbar, parent=None):
         super(StageBar, self).__init__(parent)
@@ -224,8 +223,6 @@ class StageBar(QtWidgets.QWidget):
         elif stage == "StagedConstruction" and stageView:
             stageView.show()
         
-        self.stageChanged.emit(stage, action_list)
-
 
 def createStageBar():
     """Tạo QSplitter chứa StageBar, Toolbar và mdiArea"""
@@ -251,11 +248,6 @@ def createStageBar():
 
     # Tạo StageBar và liên kết với toolbar
     stageBar = StageBar(toolbar)
-
-    stageView = mw.findChild(QtWidgets.QDockWidget, "Stage")
-    if stageView:
-        # Nếu StageView có slot updateStageActionsFromList, kết nối tín hiệu:
-       stageBar.stageChanged.connect(lambda stage, objList: stageView.updateStageActionsFromList(objList))
 
     # Dock StageBar ở trên
     dock = QtWidgets.QDockWidget("Stage Bar", mw)

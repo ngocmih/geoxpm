@@ -76,7 +76,14 @@ extern pqparaviewInitializer* pvInitializer;  // NATAES Son - 12.2024
 #include <QFormLayout>
 #include <QGroupBox>
 #include <QTextEdit>
-#include <QInputDialog>  //hieu E
+#include <QInputDialog>
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QDialogButtonBox>
+#include <QDialog>
+#include <QSpinBox>
+#include <QCheckBox>
+#include <QComboBox>
 
 FC_LOG_LEVEL_INIT("Command", false)
 
@@ -767,299 +774,419 @@ StdCmdNew::StdCmdNew()
 // }
 
 // NATAES - 2.2025 - start
+// void StdCmdNew::activated(int iMsg)
+// {
+//     Q_UNUSED(iMsg);
+
+//     // // Tạo hộp thoại mới
+//     QDialog dialog;
+//     dialog.setWindowTitle(QObject::tr("Project Properties"));
+//     dialog.setFixedSize(800, 600);
+
+//     QTabWidget* tabWidget = new QTabWidget(&dialog);
+
+// // Tạo tab "Project"
+// QWidget* projectTab = new QWidget();
+// QVBoxLayout* projectLayout = new QVBoxLayout();
+
+// // *Project Group Box*
+// QGroupBox* projectGroupBox = new QGroupBox(QObject::tr("Project"));
+// QVBoxLayout* projectGroupLayout = new QVBoxLayout();
+
+// QLabel* titleLabel = new QLabel(QObject::tr("Title:"));
+// QLineEdit* titleEdit = new QLineEdit();
+
+// QLabel* companyLabel = new QLabel(QObject::tr("Filename:"));
+// QLineEdit* companyEdit = new QLineEdit();
+
+// QLabel* directoryLabel = new QLabel(QObject::tr("Directory:"));
+// QLineEdit* directoryEdit = new QLineEdit();
+
+// projectGroupLayout->addWidget(titleLabel);
+// projectGroupLayout->addWidget(titleEdit);
+// projectGroupLayout->addWidget(companyLabel);
+// projectGroupLayout->addWidget(companyEdit);
+// projectGroupLayout->addWidget(directoryLabel);
+// projectGroupLayout->addWidget(directoryEdit);
+
+// projectGroupBox->setLayout(projectGroupLayout);
+// projectLayout->addWidget(projectGroupBox);
+
+// // *Comment Group Box*
+// QGroupBox* commentGroupBox = new QGroupBox(QObject::tr("Comment"));
+// QVBoxLayout* commentLayout = new QVBoxLayout();
+// QTextEdit* commentEdit = new QTextEdit();
+// commentLayout->addWidget(commentEdit);
+// commentGroupBox->setLayout(commentLayout);
+// projectLayout->addWidget(commentGroupBox);
+
+// projectTab->setLayout(projectLayout);
+// tabWidget->addTab(projectTab, QObject::tr("Project"));
+
+// Tạo tab "Model"
+// QWidget* modelTab = new QWidget();
+// QHBoxLayout* modelLayout = new QHBoxLayout();
+
+// // *Left Column Layout*
+// QVBoxLayout* leftColumnLayout = new QVBoxLayout();
+
+// // *Type Group Box*
+// QGroupBox* typeGroupBox = new QGroupBox(QObject::tr("Type"));
+// typeGroupBox->setMinimumWidth(350);  // Đặt kích thước tối thiểu
+// QVBoxLayout* typeLayout = new QVBoxLayout();
+
+// // *Model*
+// QLabel* modelLabel = new QLabel(QObject::tr("Model Type:"));
+// QComboBox* modelTypeCombo = new QComboBox();
+// modelTypeCombo->addItems(QStringList()
+//                          << QStringLiteral("Plane Strain") << QStringLiteral("Axisymmetry"));
+// typeLayout->addWidget(modelLabel);
+// typeLayout->addWidget(modelTypeCombo);
+
+// // *Elements*
+// QLabel* elementsLabel = new QLabel(QObject::tr("Elements:"));
+// QComboBox* elementsCombo = new QComboBox();
+// elementsCombo->addItems(QStringList() << QStringLiteral("6-noded") <<
+// QStringLiteral("15-noded")); typeLayout->addWidget(elementsLabel);
+// typeLayout->addWidget(elementsCombo);
+
+// typeGroupBox->setLayout(typeLayout);
+// leftColumnLayout->addWidget(typeGroupBox);
+
+// // *Unit Group Box*
+// QGroupBox* unitGroupBox = new QGroupBox(QObject::tr("Unit"));
+// unitGroupBox->setMinimumWidth(350);  // Đặt kích thước tối thiểu
+// QVBoxLayout* unitLayout = new QVBoxLayout();
+
+// QLabel* lengthLabel = new QLabel(QObject::tr("Length:"));
+// QComboBox* lengthCombo = new QComboBox();
+// lengthCombo->addItems(QStringList()
+//                       << QStringLiteral("m") << QStringLiteral("cm") << QStringLiteral("mm"));
+// unitLayout->addWidget(lengthLabel);
+// unitLayout->addWidget(lengthCombo);
+
+// QLabel* forceLabel = new QLabel(QObject::tr("Force:"));
+// QComboBox* forceCombo = new QComboBox();
+// forceCombo->addItems(QStringList()
+//                      << QStringLiteral("N") << QStringLiteral("kN") << QStringLiteral("lbf"));
+// unitLayout->addWidget(forceLabel);
+// unitLayout->addWidget(forceCombo);
+
+// QLabel* timeLabel = new QLabel(QObject::tr("Time:"));
+// QComboBox* timeCombo = new QComboBox();
+// timeCombo->addItems(QStringList() << QStringLiteral("s") << QStringLiteral("min")
+//                                   << QStringLiteral("h"));
+// unitLayout->addWidget(timeLabel);
+// unitLayout->addWidget(timeCombo);
+
+// unitGroupBox->setLayout(unitLayout);
+// leftColumnLayout->addWidget(unitGroupBox);
+
+// // Thêm spacer để căn chỉnh đều
+// leftColumnLayout->addStretch();
+
+// // *Right Column Layout*
+// QVBoxLayout* rightColumnLayout = new QVBoxLayout();
+
+// // *General Group Box*
+// QGroupBox* generalGroupBox = new QGroupBox(QObject::tr("General"));
+// generalGroupBox->setMinimumWidth(350);  // Đặt kích thước tối thiểu
+// QFormLayout* generalLayout = new QFormLayout();
+
+// QLabel* gravityLabel = new QLabel(QObject::tr("Gravity:"));
+// QLabel* gravityValue = new QLabel(QObject::tr("1.0 g (-Y direction)"));
+// generalLayout->addRow(gravityLabel, gravityValue);
+
+// QLabel* earthGravityLabel = new QLabel(QObject::tr("Earth gravity:"));
+// QLabel* earthGravityValue = new QLabel(QObject::tr("9.8 m/s²"));
+// generalLayout->addRow(earthGravityLabel, earthGravityValue);
+
+// QLabel* gammaWaterLabel = new QLabel(QObject::tr("γ Water:"));
+// QHBoxLayout* gammaWaterLayout = new QHBoxLayout();
+// QLineEdit* gammaWaterEdit = new QLineEdit();
+// QLabel* gammaWaterUnitLabel = new QLabel(QObject::tr("kN/m³"));
+// gammaWaterEdit->setText(QStringLiteral("10.00"));
+// gammaWaterLayout->addWidget(gammaWaterEdit);
+// gammaWaterLayout->addWidget(gammaWaterUnitLabel);
+// generalLayout->addRow(gammaWaterLabel, gammaWaterLayout);
+
+// generalGroupBox->setLayout(generalLayout);
+// rightColumnLayout->addWidget(generalGroupBox);
+
+// // *Contour Group Box*
+// QGroupBox* contourGroupBox = new QGroupBox(QObject::tr("Contour"));
+// contourGroupBox->setMinimumWidth(350);  // Đặt kích thước tối thiểu
+// QFormLayout* contourLayout = new QFormLayout();
+// QLineEdit* xminEdit = new QLineEdit();
+// QLabel* xminUnitLabel = new QLabel(QObject::tr("m"));
+// QHBoxLayout* xminLayout = new QHBoxLayout();
+// xminLayout->addWidget(xminEdit);
+// xminLayout->addWidget(xminUnitLabel);
+// contourLayout->addRow(QObject::tr("X Min:"), xminLayout);
+
+// QLineEdit* xmaxEdit = new QLineEdit();
+// QLabel* xmaxUnitLabel = new QLabel(QObject::tr("m"));
+// QHBoxLayout* xmaxLayout = new QHBoxLayout();
+// xmaxLayout->addWidget(xmaxEdit);
+// xmaxLayout->addWidget(xmaxUnitLabel);
+// contourLayout->addRow(QObject::tr("X Max:"), xmaxLayout);
+
+// QLineEdit* yminEdit = new QLineEdit();
+// QLabel* yminUnitLabel = new QLabel(QObject::tr("m"));
+// QHBoxLayout* yminLayout = new QHBoxLayout();
+// yminLayout->addWidget(yminEdit);
+// yminLayout->addWidget(yminUnitLabel);
+// contourLayout->addRow(QObject::tr("Y Min:"), yminLayout);
+
+// QLineEdit* ymaxEdit = new QLineEdit();
+// QLabel* ymaxUnitLabel = new QLabel(QObject::tr("m"));
+// QHBoxLayout* ymaxLayout = new QHBoxLayout();
+// ymaxLayout->addWidget(ymaxEdit);
+// ymaxLayout->addWidget(ymaxUnitLabel);
+// contourLayout->addRow(QObject::tr("Y Max:"), ymaxLayout);
+
+// contourGroupBox->setLayout(contourLayout);
+// rightColumnLayout->addWidget(contourGroupBox);
+
+// // Thêm spacer để căn chỉnh đều
+// rightColumnLayout->addStretch();
+
+// // Thêm các cột vào modelLayout
+// modelLayout->addLayout(leftColumnLayout);
+// modelLayout->addLayout(rightColumnLayout);
+
+// modelTab->setLayout(modelLayout);
+// tabWidget->addTab(modelTab, QObject::tr("Model"));
+
+// // Nút điều khiển
+// QPushButton* okButton = new QPushButton(QObject::tr("OK"));
+// QPushButton* cancelButton = new QPushButton(QObject::tr("Cancel"));
+// QHBoxLayout* buttonLayout = new QHBoxLayout();
+// buttonLayout->addWidget(okButton);
+// buttonLayout->addWidget(cancelButton);
+
+// QVBoxLayout* mainLayout = new QVBoxLayout();
+// mainLayout->addWidget(tabWidget);
+// mainLayout->addLayout(buttonLayout);
+
+// dialog.setLayout(mainLayout);
+
+// QObject::connect(okButton, &QPushButton::clicked, [&]() {
+//     // Lưu dữ liệu vào ActiveDocument
+//     // QString title = titleEdit->text();
+//     // QString company = companyEdit->text();
+//     // QString modelType = modelTypeCombo->currentText();
+//     QString elements = elementsCombo->currentText();
+//     QString lengthUnit = lengthCombo->currentText();
+//     QString forceUnit = forceCombo->currentText();
+//     QString timeUnit = timeCombo->currentText();
+//     QString xmin = xminEdit->text();
+//     QString xmax = xmaxEdit->text();
+//     QString ymin = yminEdit->text();
+//     QString ymax = ymaxEdit->text();
+//     QString gammaWater = gammaWaterEdit->text();
+//     // QString comment = commentEdit->toPlainText();
+
+//     doCommand(Command::Doc, QStringLiteral("App.newDocument()").toUtf8().constData());
+//     doCommand(Command::Gui, "Gui.activeDocument().activeView().viewDefaultOrientation()");
+
+// Lưu thông tin vào Meta
+// doCommand(Command::Doc,
+//           QStringLiteral("App.ActiveDocument.Meta['Title'] = '%1'")
+//               .arg(title)
+//               .toUtf8()
+//               .constData());
+// doCommand(Command::Doc,
+//           QStringLiteral("App.ActiveDocument.Meta['Filename'] = '%1'")
+//               .arg(company)
+//               .toUtf8()
+//               .constData());
+// doCommand(Command::Doc,
+//           QStringLiteral("App.ActiveDocument.Meta['ModelType'] = '%1'")
+//               .arg(modelType)
+//               .toUtf8()
+//               .constData());
+//     doCommand(Command::Doc,
+//               QStringLiteral("App.ActiveDocument.Meta['Elements'] = '%1'")
+//                   .arg(elements)
+//                   .toUtf8()
+//                   .constData());
+//     doCommand(Command::Doc,
+//               QStringLiteral("App.ActiveDocument.Meta['LengthUnit'] = '%1'")
+//                   .arg(lengthUnit)
+//                   .toUtf8()
+//                   .constData());
+//     doCommand(Command::Doc,
+//               QStringLiteral("App.ActiveDocument.Meta['ForceUnit'] = '%1'")
+//                   .arg(forceUnit)
+//                   .toUtf8()
+//                   .constData());
+//     doCommand(Command::Doc,
+//               QStringLiteral("App.ActiveDocument.Meta['TimeUnit'] = '%1'")
+//                   .arg(timeUnit)
+//                   .toUtf8()
+//                   .constData());
+//     doCommand(Command::Doc,
+//               QStringLiteral("App.ActiveDocument.Meta['Contour_XMin'] = '%1'")
+//                   .arg(xmin)
+//                   .toUtf8()
+//                   .constData());
+//     doCommand(Command::Doc,
+//               QStringLiteral("App.ActiveDocument.Meta['Contour_XMax'] = '%1'")
+//                   .arg(xmax)
+//                   .toUtf8()
+//                   .constData());
+//     doCommand(Command::Doc,
+//               QStringLiteral("App.ActiveDocument.Meta['Contour_YMin'] = '%1'")
+//                   .arg(ymin)
+//                   .toUtf8()
+//                   .constData());
+//     doCommand(Command::Doc,
+//               QStringLiteral("App.ActiveDocument.Meta['Contour_YMax'] = '%1'")
+//                   .arg(ymax)
+//                   .toUtf8()
+//                   .constData());
+//     doCommand(Command::Doc,
+//               QStringLiteral("App.ActiveDocument.Meta['GammaWater'] = '%1'")
+//                   .arg(gammaWater)
+//                   .toUtf8()
+//                   .constData());
+//     // doCommand(Command::Doc,
+//     //           QStringLiteral("App.ActiveDocument.Meta['Comment'] = '%1'")
+//     //               .arg(comment)
+//     //               .toUtf8()
+//     //               .constData());
+
+//     dialog.accept();
+// });
+
+// QObject::connect(cancelButton, &QPushButton::clicked, [&]() {
+//     dialog.reject();
+// });
+
+// dialog.exec();
+// }
 void StdCmdNew::activated(int iMsg)
 {
     Q_UNUSED(iMsg);
 
-    // // Tạo hộp thoại mới
-    QDialog dialog;
-    dialog.setWindowTitle(QObject::tr("Project Properties"));
-    dialog.setFixedSize(800, 600);
+    // ======= Thêm hộp thoại vào hàm activated() =======
+    // 1. Tạo Dialog
+    QDialog dlg(Gui::getMainWindow());
+    dlg.setWindowTitle(QObject::tr("Execution parameters"));
+    QVBoxLayout* mainLayout = new QVBoxLayout(&dlg);
 
-    QTabWidget* tabWidget = new QTabWidget(&dialog);
-
-    // // Tạo tab "Project"
-    // QWidget* projectTab = new QWidget();
-    // QVBoxLayout* projectLayout = new QVBoxLayout();
-
-    // // *Project Group Box*
-    // QGroupBox* projectGroupBox = new QGroupBox(QObject::tr("Project"));
-    // QVBoxLayout* projectGroupLayout = new QVBoxLayout();
-
-    // QLabel* titleLabel = new QLabel(QObject::tr("Title:"));
-    // QLineEdit* titleEdit = new QLineEdit();
-
-    // QLabel* companyLabel = new QLabel(QObject::tr("Filename:"));
-    // QLineEdit* companyEdit = new QLineEdit();
-
-    // QLabel* directoryLabel = new QLabel(QObject::tr("Directory:"));
-    // QLineEdit* directoryEdit = new QLineEdit();
-
-    // projectGroupLayout->addWidget(titleLabel);
-    // projectGroupLayout->addWidget(titleEdit);
-    // projectGroupLayout->addWidget(companyLabel);
-    // projectGroupLayout->addWidget(companyEdit);
-    // projectGroupLayout->addWidget(directoryLabel);
-    // projectGroupLayout->addWidget(directoryEdit);
-
-    // projectGroupBox->setLayout(projectGroupLayout);
-    // projectLayout->addWidget(projectGroupBox);
-
-    // // *Comment Group Box*
-    // QGroupBox* commentGroupBox = new QGroupBox(QObject::tr("Comment"));
-    // QVBoxLayout* commentLayout = new QVBoxLayout();
-    // QTextEdit* commentEdit = new QTextEdit();
-    // commentLayout->addWidget(commentEdit);
-    // commentGroupBox->setLayout(commentLayout);
-    // projectLayout->addWidget(commentGroupBox);
-
-    // projectTab->setLayout(projectLayout);
-    // tabWidget->addTab(projectTab, QObject::tr("Project"));
-
-    // Tạo tab "Model"
-    QWidget* modelTab = new QWidget();
-    QHBoxLayout* modelLayout = new QHBoxLayout();
-
-    // *Left Column Layout*
-    QVBoxLayout* leftColumnLayout = new QVBoxLayout();
-
-    // *Type Group Box*
-    QGroupBox* typeGroupBox = new QGroupBox(QObject::tr("Type"));
-    typeGroupBox->setMinimumWidth(350);  // Đặt kích thước tối thiểu
-    QVBoxLayout* typeLayout = new QVBoxLayout();
-
-    // *Model*
-    QLabel* modelLabel = new QLabel(QObject::tr("Model Type:"));
-    QComboBox* modelTypeCombo = new QComboBox();
-    modelTypeCombo->addItems(QStringList()
-                             << QStringLiteral("Plane Strain") << QStringLiteral("Axisymmetry"));
-    typeLayout->addWidget(modelLabel);
-    typeLayout->addWidget(modelTypeCombo);
-
-    // *Elements*
-    QLabel* elementsLabel = new QLabel(QObject::tr("Elements:"));
-    QComboBox* elementsCombo = new QComboBox();
-    elementsCombo->addItems(QStringList()
-                            << QStringLiteral("6-noded") << QStringLiteral("15-noded"));
-    typeLayout->addWidget(elementsLabel);
-    typeLayout->addWidget(elementsCombo);
-
-    typeGroupBox->setLayout(typeLayout);
-    leftColumnLayout->addWidget(typeGroupBox);
-
-    // *Unit Group Box*
-    QGroupBox* unitGroupBox = new QGroupBox(QObject::tr("Unit"));
-    unitGroupBox->setMinimumWidth(350);  // Đặt kích thước tối thiểu
-    QVBoxLayout* unitLayout = new QVBoxLayout();
-
-    QLabel* lengthLabel = new QLabel(QObject::tr("Length:"));
-    QComboBox* lengthCombo = new QComboBox();
-    lengthCombo->addItems(QStringList()
-                          << QStringLiteral("m") << QStringLiteral("cm") << QStringLiteral("mm"));
-    unitLayout->addWidget(lengthLabel);
-    unitLayout->addWidget(lengthCombo);
-
-    QLabel* forceLabel = new QLabel(QObject::tr("Force:"));
-    QComboBox* forceCombo = new QComboBox();
-    forceCombo->addItems(QStringList()
-                         << QStringLiteral("N") << QStringLiteral("kN") << QStringLiteral("lbf"));
-    unitLayout->addWidget(forceLabel);
-    unitLayout->addWidget(forceCombo);
-
-    QLabel* timeLabel = new QLabel(QObject::tr("Time:"));
-    QComboBox* timeCombo = new QComboBox();
-    timeCombo->addItems(QStringList()
-                        << QStringLiteral("s") << QStringLiteral("min") << QStringLiteral("h"));
-    unitLayout->addWidget(timeLabel);
-    unitLayout->addWidget(timeCombo);
-
-    unitGroupBox->setLayout(unitLayout);
-    leftColumnLayout->addWidget(unitGroupBox);
-
-    // Thêm spacer để căn chỉnh đều
-    leftColumnLayout->addStretch();
-
-    // *Right Column Layout*
-    QVBoxLayout* rightColumnLayout = new QVBoxLayout();
-
-    // *General Group Box*
-    QGroupBox* generalGroupBox = new QGroupBox(QObject::tr("General"));
-    generalGroupBox->setMinimumWidth(350);  // Đặt kích thước tối thiểu
-    QFormLayout* generalLayout = new QFormLayout();
-
-    QLabel* gravityLabel = new QLabel(QObject::tr("Gravity:"));
-    QLabel* gravityValue = new QLabel(QObject::tr("1.0 g (-Y direction)"));
-    generalLayout->addRow(gravityLabel, gravityValue);
-
-    QLabel* earthGravityLabel = new QLabel(QObject::tr("Earth gravity:"));
-    QLabel* earthGravityValue = new QLabel(QObject::tr("9.8 m/s²"));
-    generalLayout->addRow(earthGravityLabel, earthGravityValue);
-
-    QLabel* gammaWaterLabel = new QLabel(QObject::tr("γ Water:"));
-    QHBoxLayout* gammaWaterLayout = new QHBoxLayout();
-    QLineEdit* gammaWaterEdit = new QLineEdit();
-    QLabel* gammaWaterUnitLabel = new QLabel(QObject::tr("kN/m³"));
-    gammaWaterEdit->setText(QStringLiteral("10.00"));
-    gammaWaterLayout->addWidget(gammaWaterEdit);
-    gammaWaterLayout->addWidget(gammaWaterUnitLabel);
-    generalLayout->addRow(gammaWaterLabel, gammaWaterLayout);
-
-    generalGroupBox->setLayout(generalLayout);
-    rightColumnLayout->addWidget(generalGroupBox);
-
-    // *Contour Group Box*
-    QGroupBox* contourGroupBox = new QGroupBox(QObject::tr("Contour"));
-    contourGroupBox->setMinimumWidth(350);  // Đặt kích thước tối thiểu
-    QFormLayout* contourLayout = new QFormLayout();
-    QLineEdit* xminEdit = new QLineEdit();
-    QLabel* xminUnitLabel = new QLabel(QObject::tr("m"));
-    QHBoxLayout* xminLayout = new QHBoxLayout();
-    xminLayout->addWidget(xminEdit);
-    xminLayout->addWidget(xminUnitLabel);
-    contourLayout->addRow(QObject::tr("X Min:"), xminLayout);
-
-    QLineEdit* xmaxEdit = new QLineEdit();
-    QLabel* xmaxUnitLabel = new QLabel(QObject::tr("m"));
-    QHBoxLayout* xmaxLayout = new QHBoxLayout();
-    xmaxLayout->addWidget(xmaxEdit);
-    xmaxLayout->addWidget(xmaxUnitLabel);
-    contourLayout->addRow(QObject::tr("X Max:"), xmaxLayout);
-
-    QLineEdit* yminEdit = new QLineEdit();
-    QLabel* yminUnitLabel = new QLabel(QObject::tr("m"));
-    QHBoxLayout* yminLayout = new QHBoxLayout();
-    yminLayout->addWidget(yminEdit);
-    yminLayout->addWidget(yminUnitLabel);
-    contourLayout->addRow(QObject::tr("Y Min:"), yminLayout);
-
-    QLineEdit* ymaxEdit = new QLineEdit();
-    QLabel* ymaxUnitLabel = new QLabel(QObject::tr("m"));
-    QHBoxLayout* ymaxLayout = new QHBoxLayout();
-    ymaxLayout->addWidget(ymaxEdit);
-    ymaxLayout->addWidget(ymaxUnitLabel);
-    contourLayout->addRow(QObject::tr("Y Max:"), ymaxLayout);
-
-    contourGroupBox->setLayout(contourLayout);
-    rightColumnLayout->addWidget(contourGroupBox);
-
-    // Thêm spacer để căn chỉnh đều
-    rightColumnLayout->addStretch();
-
-    // Thêm các cột vào modelLayout
-    modelLayout->addLayout(leftColumnLayout);
-    modelLayout->addLayout(rightColumnLayout);
-
-    modelTab->setLayout(modelLayout);
-    tabWidget->addTab(modelTab, QObject::tr("Model"));
-
-    // Nút điều khiển
-    QPushButton* okButton = new QPushButton(QObject::tr("OK"));
-    QPushButton* cancelButton = new QPushButton(QObject::tr("Cancel"));
-    QHBoxLayout* buttonLayout = new QHBoxLayout();
-    buttonLayout->addWidget(okButton);
-    buttonLayout->addWidget(cancelButton);
-
-    QVBoxLayout* mainLayout = new QVBoxLayout();
+    // 2. Tạo Tab Widget
+    QTabWidget* tabWidget = new QTabWidget(&dlg);
     mainLayout->addWidget(tabWidget);
-    mainLayout->addLayout(buttonLayout);
 
-    dialog.setLayout(mainLayout);
+    // ========== TAB 1: GENERAL ==========
+    QWidget* generalTab = new QWidget(tabWidget);
+    QFormLayout* generalLayout = new QFormLayout(generalTab);
 
-    QObject::connect(okButton, &QPushButton::clicked, [&]() {
-        // Lưu dữ liệu vào ActiveDocument
-        // QString title = titleEdit->text();
-        // QString company = companyEdit->text();
-        // QString modelType = modelTypeCombo->currentText();
-        QString elements = elementsCombo->currentText();
-        QString lengthUnit = lengthCombo->currentText();
-        QString forceUnit = forceCombo->currentText();
-        QString timeUnit = timeCombo->currentText();
-        QString xmin = xminEdit->text();
-        QString xmax = xmaxEdit->text();
-        QString ymin = yminEdit->text();
-        QString ymax = ymaxEdit->text();
-        QString gammaWater = gammaWaterEdit->text();
-        // QString comment = commentEdit->toPlainText();
+    // Interaction kernel
+    QComboBox* interactionKernelCombo = new QComboBox(generalTab);
+    interactionKernelCombo->addItem(QStringLiteral("Cubic spline"));
+    interactionKernelCombo->addItem(QStringLiteral("Quintic"));
+    interactionKernelCombo->addItem(QStringLiteral("Wendland"));
+    generalLayout->addRow(QObject::tr("Interaction kernel:"), interactionKernelCombo);
 
-        doCommand(Command::Doc, QStringLiteral("App.newDocument()").toUtf8().constData());
-        doCommand(Command::Gui, "Gui.activeDocument().activeView().viewDefaultOrientation()");
+    // Approximation algorithm
+    QComboBox* approxAlgorithmCombo = new QComboBox(generalTab);
+    approxAlgorithmCombo->addItem(QStringLiteral("Type 1: o/p^2"));
+    approxAlgorithmCombo->addItem(QStringLiteral("Type 2: o/p^2 + o/p^3"));
+    generalLayout->addRow(QObject::tr("Approximation algorithm:"), approxAlgorithmCombo);
 
-        // Lưu thông tin vào Meta
-        // doCommand(Command::Doc,
-        //           QStringLiteral("App.ActiveDocument.Meta['Title'] = '%1'")
-        //               .arg(title)
-        //               .toUtf8()
-        //               .constData());
-        // doCommand(Command::Doc,
-        //           QStringLiteral("App.ActiveDocument.Meta['Filename'] = '%1'")
-        //               .arg(company)
-        //               .toUtf8()
-        //               .constData());
-        // doCommand(Command::Doc,
-        //           QStringLiteral("App.ActiveDocument.Meta['ModelType'] = '%1'")
-        //               .arg(modelType)
-        //               .toUtf8()
-        //               .constData());
-        doCommand(Command::Doc,
-                  QStringLiteral("App.ActiveDocument.Meta['Elements'] = '%1'")
-                      .arg(elements)
-                      .toUtf8()
-                      .constData());
-        doCommand(Command::Doc,
-                  QStringLiteral("App.ActiveDocument.Meta['LengthUnit'] = '%1'")
-                      .arg(lengthUnit)
-                      .toUtf8()
-                      .constData());
-        doCommand(Command::Doc,
-                  QStringLiteral("App.ActiveDocument.Meta['ForceUnit'] = '%1'")
-                      .arg(forceUnit)
-                      .toUtf8()
-                      .constData());
-        doCommand(Command::Doc,
-                  QStringLiteral("App.ActiveDocument.Meta['TimeUnit'] = '%1'")
-                      .arg(timeUnit)
-                      .toUtf8()
-                      .constData());
-        doCommand(Command::Doc,
-                  QStringLiteral("App.ActiveDocument.Meta['Contour_XMin'] = '%1'")
-                      .arg(xmin)
-                      .toUtf8()
-                      .constData());
-        doCommand(Command::Doc,
-                  QStringLiteral("App.ActiveDocument.Meta['Contour_XMax'] = '%1'")
-                      .arg(xmax)
-                      .toUtf8()
-                      .constData());
-        doCommand(Command::Doc,
-                  QStringLiteral("App.ActiveDocument.Meta['Contour_YMin'] = '%1'")
-                      .arg(ymin)
-                      .toUtf8()
-                      .constData());
-        doCommand(Command::Doc,
-                  QStringLiteral("App.ActiveDocument.Meta['Contour_YMax'] = '%1'")
-                      .arg(ymax)
-                      .toUtf8()
-                      .constData());
-        doCommand(Command::Doc,
-                  QStringLiteral("App.ActiveDocument.Meta['GammaWater'] = '%1'")
-                      .arg(gammaWater)
-                      .toUtf8()
-                      .constData());
-        // doCommand(Command::Doc,
-        //           QStringLiteral("App.ActiveDocument.Meta['Comment'] = '%1'")
-        //               .arg(comment)
-        //               .toUtf8()
-        //               .constData());
+    // Particle distance
+    QDoubleSpinBox* particleDistSpin = new QDoubleSpinBox(generalTab);
+    particleDistSpin->setRange(0.0, 1e6);
+    particleDistSpin->setDecimals(5);
+    particleDistSpin->setValue(0.01);
+    generalLayout->addRow(QObject::tr("Particle distance:"), particleDistSpin);
 
-        dialog.accept();
-    });
+    // Critical timestep factor
+    QDoubleSpinBox* criticalTimestepSpin = new QDoubleSpinBox(generalTab);
+    criticalTimestepSpin->setRange(0.0, 10.0);
+    criticalTimestepSpin->setDecimals(3);
+    criticalTimestepSpin->setValue(0.2);
+    generalLayout->addRow(QObject::tr("Critical timestep factor (CFL):"), criticalTimestepSpin);
 
-    QObject::connect(cancelButton, &QPushButton::clicked, [&]() {
-        dialog.reject();
-    });
+    // Gravity
+    QDoubleSpinBox* gravitySpin = new QDoubleSpinBox(generalTab);
+    gravitySpin->setRange(-1000.0, 1000.0);
+    gravitySpin->setDecimals(3);
+    gravitySpin->setValue(-9.81);
+    generalLayout->addRow(QObject::tr("Gravity [m/s^2]:"), gravitySpin);
 
-    dialog.exec();
+    generalTab->setLayout(generalLayout);
+    tabWidget->addTab(generalTab, QObject::tr("General"));
+
+
+    // ========== TAB 2: PARTICLE SHIFTING ==========
+    QWidget* shiftingTab = new QWidget(tabWidget);
+    QFormLayout* shiftingLayout = new QFormLayout(shiftingTab);
+
+    QComboBox* detectionAlgoCombo = new QComboBox(shiftingTab);
+    detectionAlgoCombo->addItem(QStringLiteral("Kernel gradient"));
+    detectionAlgoCombo->addItem(QStringLiteral("Color function"));
+    shiftingLayout->addRow(QObject::tr("Detection algorithm:"), detectionAlgoCombo);
+
+    QDoubleSpinBox* freeSurfaceSpin = new QDoubleSpinBox(shiftingTab);
+    freeSurfaceSpin->setRange(0.0, 1.0);
+    freeSurfaceSpin->setDecimals(2);
+    freeSurfaceSpin->setValue(0.8);
+    shiftingLayout->addRow(QObject::tr("Free surface threshold (<=1):"), freeSurfaceSpin);
+
+    shiftingTab->setLayout(shiftingLayout);
+    tabWidget->addTab(shiftingTab, QObject::tr("Particle shifting"));
+
+
+    // ========== TAB 3: ARTIFICIAL VISCOSITY ==========
+    QWidget* viscosityTab = new QWidget(tabWidget);
+    QFormLayout* viscosityLayout = new QFormLayout(viscosityTab);
+
+    QDoubleSpinBox* alphaSpin = new QDoubleSpinBox(viscosityTab);
+    alphaSpin->setRange(0.0, 1e6);
+    alphaSpin->setDecimals(3);
+    alphaSpin->setValue(0.01);
+    viscosityLayout->addRow(QObject::tr("Alpha coefficient:"), alphaSpin);
+
+    QDoubleSpinBox* betaSpin = new QDoubleSpinBox(viscosityTab);
+    betaSpin->setRange(0.0, 1e6);
+    betaSpin->setDecimals(3);
+    betaSpin->setValue(0.1);
+    viscosityLayout->addRow(QObject::tr("Beta coefficient:"), betaSpin);
+
+    QDoubleSpinBox* etaSpin = new QDoubleSpinBox(viscosityTab);
+    etaSpin->setRange(0.0, 1e6);
+    etaSpin->setDecimals(3);
+    etaSpin->setValue(0.05);
+    viscosityLayout->addRow(QObject::tr("Eta coefficient:"), etaSpin);
+
+    viscosityTab->setLayout(viscosityLayout);
+    tabWidget->addTab(viscosityTab, QObject::tr("Artificial viscosity"));
+
+
+    // ========== NÚT OK/CANCEL ==========
+    QDialogButtonBox* buttonBox = new QDialogButtonBox(
+
+        QDialogButtonBox::Ok | QDialogButtonBox::Cancel,
+        &dlg);
+    QObject::connect(buttonBox, &QDialogButtonBox::accepted, &dlg, &QDialog::accept);
+    QObject::connect(buttonBox, &QDialogButtonBox::rejected, &dlg, &QDialog::reject);
+    mainLayout->addWidget(buttonBox);
+
+    // 3. Hiển thị hộp thoại
+    dlg.setLayout(mainLayout);
+    if (dlg.exec() == QDialog::Accepted) {
+        // Người dùng ấn OK → Tiến hành tạo Project mới
+        // Ví dụ: App::GetApplication().newDocument("Unnamed");
+    }
+    else {
+        // Người dùng ấn Cancel → Không làm gì cả
+    }
 }
+
 // NATAES - 2.2025 - end
 
 
